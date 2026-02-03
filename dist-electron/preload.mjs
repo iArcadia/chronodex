@@ -20,3 +20,17 @@ electron.contextBridge.exposeInMainWorld("ipcRenderer", {
   // You can expose other APTs you need here.
   // ...
 });
+electron.contextBridge.exposeInMainWorld("api", {
+  /**
+   * Create a new game.
+   */
+  createGame: (name, logoPath) => {
+    return electron.ipcRenderer.invoke("game:create", name, logoPath);
+  },
+  /**
+   * Get all games.
+   */
+  getGames: () => {
+    return electron.ipcRenderer.invoke("game:list");
+  }
+});

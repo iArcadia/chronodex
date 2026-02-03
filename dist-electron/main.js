@@ -1,4 +1,4 @@
-import { app, BrowserWindow } from "electron";
+import { app, ipcMain, BrowserWindow } from "electron";
 import { fileURLToPath } from "url";
 import path from "path";
 import { createRequire } from "module";
@@ -58,6 +58,32 @@ function ensureDefaultPlayer() {
         `).run();
   }
 }
+function getDb() {
+  if (!db) {
+    throw new Error("Database has not been initialized. Call initDb() first.");
+  }
+  return db;
+}
+function registerIpcHandlers() {
+  ipcMain.handle("game:create", (_event, name, logoPath) => {
+    const db2 = getDb();
+    const stmt = db2.prepare(`
+            INSERT INTO games (name, logo_path)
+            VALUES (?, ?)
+        `);
+    const result = stmt.run(name, logoPath);
+    return result.lastInsertRowid;
+  });
+  ipcMain.handle("game:list", () => {
+    const db2 = getDb();
+    const stmt = db2.prepare(`
+            SELECT id, name, logo_path
+            FROM games
+            ORDER BY name ASC
+        `);
+    return stmt.all();
+  });
+}
 const __filename$1 = fileURLToPath(import.meta.url);
 const __dirname$1 = path.dirname(__filename$1);
 let mainWindow = null;
@@ -84,6 +110,7 @@ function createWindow() {
 }
 function initialize() {
   initDb();
+  registerIpcHandlers();
   createWindow();
 }
 app.whenReady().then(() => {

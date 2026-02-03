@@ -2,6 +2,7 @@ import {app, BrowserWindow} from 'electron';
 import { fileURLToPath } from 'url';
 import path from 'path';
 import {initDb} from './db';
+import {registerIpcHandlers} from "./ipc.ts";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -40,6 +41,7 @@ function createWindow(): void {
  */
 function initialize(): void {
     initDb();
+    registerIpcHandlers();
     createWindow();
 }
 
