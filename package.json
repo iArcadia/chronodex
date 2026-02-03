@@ -10,6 +10,7 @@
     "postinstall": "electron-rebuild -f -w better-sqlite3"
   },
   "dependencies": {
+    "@vicons/ionicons5": "^0.13.0",
     "better-sqlite3": "^12.6.2",
     "naive-ui": "^2.43.2",
     "vue": "^3.4.21"

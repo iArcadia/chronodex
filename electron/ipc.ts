@@ -7,6 +7,7 @@ import {getDb} from './db';
 function registerIpcHandlers(): void {
     /**
      * Create a new game.
+     * @return Number
      */
     ipcMain.handle('game:create', (_event, name: string, logoPath: string|null) => {
         const db = getDb();
@@ -23,6 +24,7 @@ function registerIpcHandlers(): void {
 
     /**
      * Fetch all games.
+     * @return Array<Game>
      */
     ipcMain.handle('game:list', () => {
         const db = getDb();
